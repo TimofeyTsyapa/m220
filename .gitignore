@@ -85,6 +85,7 @@ celerybeat-schedule
 .env
 .ini
 .venv
+.vscode/
 env/
 venv/
 ENV/
