@@ -192,23 +192,9 @@ def get_movies(filters, page, movies_per_page):
     else:
         cursor = db.movies.find(query).sort(sort)
 
-    total_num_movies = 0
-    if page == 0:
-        total_num_movies = db.movies.count_documents(query)
-    """
-    Ticket: Paging
-
-    Before this method returns back to the API, use the "movies_per_page"
-    argument to decide how many movies get displayed per page. The "page"
-    argument will decide which page
-
-    Paging can be implemented by using the skip() and limit() methods against
-    the Pymongo cursor.
-    """
-
-    # TODO: Paging
-    # Use the cursor to only return the movies that belong on the current page.
-    movies = cursor.limit(movies_per_page)
+    num_of_paging_movies = movies_per_page * page
+    total_num_movies = db.movies.count_documents(query) - num_of_paging_movies
+    movies = cursor.skip(num_of_paging_movies).limit(movies_per_page)
 
     return (list(movies), total_num_movies)
 
