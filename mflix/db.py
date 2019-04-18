@@ -325,19 +325,11 @@ def add_user(name, email, hashedpw):
     Given a name, email and password, inserts a document with those credentials
     to the `users` collection.
     """
-
-    """
-    Ticket: Durable Writes
-
-    Please increase the durability of this method by using a non-default write
-    concern with ``insert_one``.
-    """
-
+    write_concern_majority = WriteConcern(w="majority")
     try:
-        # TODO: Durable Writes
         # Use a more durable Write Concern for this operation.
         # Insert a user with the "name", "email", and "password" fields.
-        db.users.insert_one({
+        db.users.with_options(write_concern=write_concern_majority).insert_one({
             "name": name,
             "email": email,
             "password": hashedpw
