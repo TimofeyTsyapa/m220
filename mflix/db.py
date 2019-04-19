@@ -201,17 +201,17 @@ def get_movie(id):
             },
             {
                 "$lookup": {
-                    "from": "comments",
-                    "localField": "_id",
-                    "foreignField": "movie_id",
-                    "as": "comments"
-                }        
+                    "from": 'comments',
+                    "let": { 'id': '$_id' },
+                    "pipeline": [
+                        { '$match':
+                            { '$expr': { '$eq': [ '$movie_id', '$$id' ] } }
             },
-            {
-                "$sort": {
-                    "comments.date": DESCENDING
+                        {"$sort":{"date": DESCENDING}}
+                    ],
+                    "as": 'comments'
                 }
-            },
+            }
         ]
         movie = db.movies.aggregate(pipeline).next()
         return movie
