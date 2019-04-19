@@ -12,7 +12,7 @@ Look out for TODO markers for additional help. Good luck!
 from flask import current_app, g
 from werkzeug.local import LocalProxy
 
-from pymongo import MongoClient, DESCENDING
+from pymongo import MongoClient, DESCENDING, ASCENDING
 from pymongo.write_concern import WriteConcern
 from pymongo.errors import DuplicateKeyError, OperationFailure
 from bson.objectid import ObjectId
@@ -193,27 +193,26 @@ def get_movie(id):
     comments collection using expressive $lookup.
     """
     try:
-
-        """
-        Ticket: Get Comments
-
-        Please implement a $lookup stage in this pipeline to find all the
-        comments for the given movie. The movie_id in the `comments` collection
-        can be used to refer to the _id from the `movies` collection.
-
-        Embed the joined comments in a new field called "comments".
-        """
-
-        # TODO: Get Comments
-        # Implement the required pipeline.
         pipeline = [
             {
                 "$match": {
                     "_id": ObjectId(id)
                 }
-            }
+            },
+            {
+                "$lookup": {
+                    "from": "comments",
+                    "localField": "_id",
+                    "foreignField": "movie_id",
+                    "as": "comments"
+                }        
+            },
+            {
+                "$sort": {
+                    "comments.date": DESCENDING
+                }
+            },
         ]
-
         movie = db.movies.aggregate(pipeline).next()
         return movie
 
