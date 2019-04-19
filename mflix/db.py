@@ -244,17 +244,6 @@ def get_all_genres():
     ]))[0]["genres"]
 
 
-"""
-Ticket: Create/Update Comments
-
-For this ticket, you will need to implement the following two methods:
-
-- add_comment
-- update_comment
-
-You can find these methods below this docstring. Make sure to read the comments
-to better understand the task.
-"""
 
 
 def add_comment(movie_id, user, comment, date):
