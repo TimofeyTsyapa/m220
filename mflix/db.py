@@ -201,18 +201,8 @@ def get_movie(id):
         movie = db.movies.aggregate(pipeline).next()
         return movie
 
-    # TODO: Error Handling
     # If an invalid ID is passed to `get_movie`, it should return None.
-    except (StopIteration) as _:
-
-        """
-        Ticket: Error Handling
-
-        Handle the InvalidId exception from the BSON library the same way as the
-        StopIteration exception is handled. Both exceptions should result in
-        `get_movie` returning None.
-        """
-
+    except (StopIteration, InvalidId) as _:
         return None
 
     except Exception as e:
