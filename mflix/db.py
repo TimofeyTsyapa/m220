@@ -27,19 +27,12 @@ def get_db():
     db = getattr(g, "_database", None)
     MFLIX_DB_URI = current_app.config["MFLIX_DB_URI"]
     if db is None:
-        """
-        Ticket: Timeouts
-
-        Please prevent the program from waiting indefinitely by setting the
-        write concern timeout limit to 2500 milliseconds.
-        """
-
         db = g._database = MongoClient(
         MFLIX_DB_URI,
         # Set the maximum connection pool size to 50 active connections.
         maxPoolSize=50,
-        # TODO: Timeouts
         # Set the write timeout limit to 2500 milliseconds.
+        wtimeout=2500
         )["mflix"]
     return db
 
